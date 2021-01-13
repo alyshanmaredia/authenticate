@@ -34,9 +34,7 @@ mongoose.connect(URI, {
 
 })
 
-app.use('/', (req,res,next)=>{
-    res.json({msg: "Hello Home!"})
-})
+
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, ()=>{
