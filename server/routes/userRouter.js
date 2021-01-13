@@ -7,6 +7,7 @@ Router.post('/activation', userController.activateEmail)
 
 Router.post('/login', userController.login)
 
+Router.post('/refresh_token', userController.getAccessToken)
 
 
 
