@@ -33,7 +33,7 @@ const userController = {
             const activation_token = createActivationToken(newUser)
 
             const url = `${CLIENT_URL}/user/activate/${activation_token}`
-            sendMail(email, url)
+            sendMail(email, url,"Verify your email Address")
             
             
             res.json({msg: "Register"})
@@ -95,6 +95,36 @@ const userController = {
                 res.json({access_token})
                 console.log(user)
             })
+        } catch (err) {
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    forgotPassword: async (req,res) =>{
+        try{
+            const {email} = req.body
+            const user = await Users.findOne({email})
+            if(!user) return res.status(400).json({msg: "This email doesnt exist."})
+
+            const access_token = createAccessToken({id: user._id})
+            const url = `${CLIENT_URL}/user/reset/${access_token}`
+
+            sendMail(email, url, "Reset Your password")
+            res.json({msg: "Re-send the password, Please Check your Email"})
+        }catch{
+            return res.status(500).json({msg: err.message})
+        }
+    },
+    resetPassword: async (req,res) =>{
+        try {
+            const {password} = req.body
+            const passwordHash = await bcrypt.hash(password, 12)
+
+
+            await Users.findByIdAndUpdate({_id: req.user.id},{
+                password: passwordHash
+            })
+
+            res.json({msg: "Password Successfully changed!"})
         } catch (err) {
             return res.status(500).json({msg: err.message})
         }
