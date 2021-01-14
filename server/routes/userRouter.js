@@ -20,4 +20,10 @@ Router.post('/all_infor', authenticate, authAdmin, userController.getUsersAllInf
 
 Router.post('/logout', userController.logout)
 
+Router.patch('/update', authenticate, userController.updateUser)
+
+Router.patch('/update_role/:id', authenticate, authAdmin, userController.updateUsersRole)
+
+Router.delete('/delete/:id', authenticate, authAdmin, userController.deleteUser)
+
 module.exports = Router
